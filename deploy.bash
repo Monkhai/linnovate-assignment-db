@@ -11,4 +11,8 @@ echo "Step 1: Setting up the database..."
 echo "Step 2: Running migrations..."
 ./scripts/run_migrations.sh
 
+# Step 3: Run tests
+echo "Step 3: Running tests..."
+./scripts/run_tests.sh
+
 echo "Deployment completed successfully!" 

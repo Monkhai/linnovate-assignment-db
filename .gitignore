@@ -1,0 +1,18 @@
+# Docker volumes
+pgdata/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Database dumps
+*.dump
+*.sql.gz
+*.bak
+
+# System files
+.DS_Store
+Thumbs.db
