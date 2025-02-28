@@ -1,6 +1,7 @@
 CREATE TABLE reviews (
     id SERIAL PRIMARY KEY,
     user_id VARCHAR(255) NOT NULL,
+    product_id INTEGER NOT NULL REFERENCES products(id),
     review_title VARCHAR(255) NOT NULL,
     review_content TEXT NOT NULL,
     stars INTEGER NOT NULL CHECK (stars >= 1 AND stars <= 5),

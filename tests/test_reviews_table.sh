@@ -33,7 +33,7 @@ echo "Test 2: Checking if all required columns exist..."
 COLUMNS=$(run_query "SELECT column_name FROM information_schema.columns WHERE table_name = 'reviews' ORDER BY ordinal_position;")
 
 # Define expected columns
-EXPECTED_COLUMNS=("id" "user_id" "review_title" "review_content" "stars" "created_at")
+EXPECTED_COLUMNS=("id" "user_id" "product_id" "review_title" "review_content" "stars" "created_at")
 
 # Check each expected column
 for column in "${EXPECTED_COLUMNS[@]}"; do
@@ -99,6 +99,32 @@ if [[ $CREATED_AT_TYPE == *"timestamp with time zone"* ]]; then
   echo "✓ Column 'created_at' has correct type: timestamp with time zone"
 else
   echo "✗ Test failed: Column 'created_at' has incorrect type: $CREATED_AT_TYPE"
+  exit 1
+fi
+
+# Test for product_id foreign key constraint
+echo "Test: Verifying product_id foreign key constraint..."
+# First, create a product for testing
+PRODUCT_ID=$(run_query "INSERT INTO products (name, price) VALUES ('Test Product', 29.99) RETURNING id;")
+PRODUCT_ID=$(echo $PRODUCT_ID | tr -d '[:space:]')
+
+# Try inserting a review with a valid product_id
+echo "Trying to insert a review with valid product_id..."
+VALID_INSERT=$(run_query_with_error_check "INSERT INTO reviews (user_id, product_id, review_title, review_content, stars) VALUES ('test_user', $PRODUCT_ID, 'Test Review', 'This is a test review', 5);")
+if [[ $VALID_INSERT == "SUCCESS" ]]; then
+  echo "✓ Test passed: Successfully inserted review with valid product_id"
+else
+  echo "✗ Test failed: Could not insert review with valid product_id"
+  exit 1
+fi
+
+# Try inserting a review with an invalid product_id
+echo "Trying to insert a review with invalid product_id..."
+INVALID_INSERT=$(run_query_with_error_check "INSERT INTO reviews (user_id, product_id, review_title, review_content, stars) VALUES ('test_user', 999999, 'Test Review', 'This is a test review', 5);")
+if [[ $INVALID_INSERT == "ERROR" ]]; then
+  echo "✓ Test passed: Properly rejected review with invalid product_id"
+else
+  echo "✗ Test failed: Accepted review with invalid product_id"
   exit 1
 fi
 
