@@ -19,4 +19,4 @@ echo "Step 3: Running tests..."
 echo "Step 4: Connecting to the database..."
 echo "To exit the PostgreSQL terminal, type: \q"
 echo "-----------------------------------------"
-docker exec -it $(docker-compose ps -q db) psql -U test_user -d test_db 
+docker exec -it $(docker-compose ps -q db) psql -U postgres -d postgres 

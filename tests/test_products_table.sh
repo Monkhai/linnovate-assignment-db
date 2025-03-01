@@ -5,7 +5,7 @@ echo "Testing products table..."
 
 # Function to run a SQL query and capture the output
 run_query() {
-  docker exec -i $(docker-compose ps -q db) psql -U test_user -d test_db -t -c "$1"
+  docker exec -i $(docker-compose ps -q db) psql -U postgres -d postgres -t -c "$1"
 }
 
 # Test 1: Check if products table exists
