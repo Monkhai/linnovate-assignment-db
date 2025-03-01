@@ -245,5 +245,7 @@ done
 
 # Clean up test data
 run_query "DELETE FROM reviews WHERE user_id = 'test_user';"
+# Clean up test product
+run_query "DELETE FROM products WHERE name = 'Test Product';"
 
 echo "All reviews table tests passed successfully! ✅" 
